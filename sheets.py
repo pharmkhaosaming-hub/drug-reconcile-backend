@@ -2,6 +2,8 @@
 sheets.py — Google Sheets integration สำหรับเก็บข้อมูลคำขอยา
 """
 import gspread
+import json
+import os
 from google.oauth2.service_account import Credentials
 from datetime import datetime
 from cryptography.fernet import Fernet
@@ -60,12 +62,21 @@ class SheetsManager:
                               else Fernet.generate_key())
 
     def _get_client(self) -> gspread.Client:
-        """Lazy-load Google Sheets client"""
+        """Lazy-load Google Sheets client
+        อ่าน credentials จาก env var GOOGLE_CREDENTIALS_JSON (สำหรับ Railway)
+        หรือจาก file GOOGLE_SERVICE_ACCOUNT_FILE (สำหรับ local)
+        """
         if self._client is None:
-            creds = Credentials.from_service_account_file(
-                settings.GOOGLE_SERVICE_ACCOUNT_FILE,
-                scopes=SCOPES
-            )
+            if settings.GOOGLE_CREDENTIALS_JSON:
+                # Railway: ใช้ JSON string จาก env var
+                info = json.loads(settings.GOOGLE_CREDENTIALS_JSON)
+                creds = Credentials.from_service_account_info(info, scopes=SCOPES)
+            else:
+                # Local: ใช้ไฟล์
+                creds = Credentials.from_service_account_file(
+                    settings.GOOGLE_SERVICE_ACCOUNT_FILE,
+                    scopes=SCOPES
+                )
             self._client = gspread.authorize(creds)
         return self._client
 
