@@ -149,7 +149,30 @@ async def get_liff_config():
         "hospital_name": settings.OUR_HOSPITAL_NAME,
     }
 
-
+@app.get("/debug/check-credentials", tags=["Debug"])
+async def check_credentials():
+    """ทดสอบว่า GOOGLE_CREDENTIALS_JSON ถูกต้องไหม"""
+    from config import settings
+    import json as _json
+    creds = settings.GOOGLE_CREDENTIALS_JSON
+    if not creds:
+        return {"status": "EMPTY", "message": "GOOGLE_CREDENTIALS_JSON is not set"}
+    try:
+        parsed = _json.loads(creds)
+        return {
+            "status": "VALID",
+            "type": parsed.get("type"),
+            "project_id": parsed.get("project_id"),
+            "client_email": parsed.get("client_email"),
+            "length": len(creds)
+        }
+    except Exception as e:
+        return {
+            "status": "INVALID_JSON",
+            "error": str(e),
+            "length": len(creds),
+            "first_50_chars": creds[:50]
+        }
 # ─── Entry point ─────────────────────────────────────────────────────────────
 if __name__ == "__main__":
     import uvicorn
