@@ -36,6 +36,7 @@ app.add_middleware(
     allow_origins=[
         "https://liff.line.me",
         "https://miniapp.line.me",
+        "https://pharmkhaosaming-hub.github.io",
         "http://localhost:3000",  # dev
     ],
     allow_credentials=True,
