@@ -51,9 +51,9 @@ async def root():
     return {"status": "ok", "service": "Drug Reconciliation API", "version": "1.0.0"}
 
 
-@app.get("/health", tags=["Health"])
-async def health():
-    return {"status": "healthy"}
+@app.get("/health", tags=["System"])
+async def health_check():
+    return {"status": "ok"}
     
 @app.post("/api/debug-body", tags=["Debug"])
 async def debug_body(request: Request):
