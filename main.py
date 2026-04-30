@@ -7,7 +7,7 @@ from fastapi import FastAPI, Request, HTTPException, Header
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from linebot.v3.exceptions import InvalidSignatureError
-from linebot.v3.webhooks import WebhookPayload
+
 
 from config import settings
 from models import IncomingQueryForm, OutgoingQueryForm, SubmitResponse
