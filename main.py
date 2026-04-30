@@ -109,6 +109,7 @@ async def submit_incoming(form: IncomingQueryForm):
             message=f"บันทึกคำขอเรียบร้อยแล้ว\nCase ID: {case_id}\nเภสัชกรจะติดต่อกลับโดยเร็วที่สุด"
         )
     except ValueError as e:
+        logger.error(f"ValueError in submit_incoming: {e}")
         raise HTTPException(status_code=422, detail=str(e))
     except Exception as e:
         logger.error(f"Submit incoming error: {e}")
