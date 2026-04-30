@@ -54,7 +54,18 @@ async def root():
 @app.get("/health", tags=["Health"])
 async def health():
     return {"status": "healthy"}
-
+    
+@app.post("/api/debug-body", tags=["Debug"])
+async def debug_body(request: Request):
+    body = await request.body()
+    body_str = body.decode("utf-8")
+    headers = dict(request.headers)
+    return {
+        "body_length": len(body_str),
+        "body_preview": body_str[:300],
+        "content_type": headers.get("content-type", "missing"),
+        "content_length": headers.get("content-length", "missing"),
+    }
 
 # ─── LINE Webhook ────────────────────────────────────────────────────────────
 @app.post("/webhook", tags=["LINE"])
