@@ -14,6 +14,7 @@ class Settings(BaseSettings):
 
     # Google Sheets
     GOOGLE_SERVICE_ACCOUNT_FILE: str = "./google_credentials.json"
+    GOOGLE_CREDENTIALS_JSON: str = ""   # JSON string สำหรับ Railway (แทน file)
     GOOGLE_SPREADSHEET_ID: str
 
     # App
